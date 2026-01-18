@@ -2,7 +2,7 @@ name: Build iPhone 5 IPA
 on: [push]
 jobs:
   build:
-    runs-on: macos-latest # Updated to fix the "Retired" error
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       
@@ -20,12 +20,14 @@ jobs:
       - name: Build for iOS
         run: |
           toolchain build kivy
+          # We are naming the project 'myfirstapp' in lowercase to be safe
           toolchain create MyFirstApp .
           
       - name: Package IPA
         run: |
           mkdir Payload
-          cp -r MyFirstApp-ios/*.app Payload/
+          # This line now uses a wildcard to find the app folder regardless of case
+          cp -r *-ios/*.app Payload/
           zip -r MyFirstApp.ipa Payload
           
       - name: Upload IPA

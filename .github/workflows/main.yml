@@ -2,14 +2,15 @@ name: Build iPhone 5 IPA
 on: [push]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python_version: '3.9'
+          # FIXED: Used a dash '-' to fix the 'Unexpected input' warning
+          python-version: '3.9'
           
       - name: Install Build Tools
         run: |
@@ -24,10 +25,11 @@ jobs:
           
       - name: Package IPA
         run: |
+          # Create the required Payload folder
           mkdir -p Payload
-          # This command finds the actual app folder and copies it into Payload
-          find . -name "*.app" -not -path "*/IDLE.app/*" -maxdepth 3 -exec cp -r {} Payload/ \;
-          # This creates the final IPA file Sideloadly needs
+          # This command finds your actual app and puts it in the Payload
+          find . -name "*.app" -maxdepth 3 -not -path "*IDLE*" -exec cp -r {} Payload/ \;
+          # Zip it up
           zip -r MyFirstApp.ipa Payload
           
       - name: Upload IPA

@@ -25,8 +25,9 @@ jobs:
       - name: Package IPA
         run: |
           mkdir -p Payload
-          # This command specifically finds your app folder and ignores system tools
-          find MyFirstApp-ios -name "*.app" -maxdepth 1 -exec cp -r {} Payload/ \;
+          # This command finds the actual app folder and copies it into Payload
+          find . -name "*.app" -not -path "*/IDLE.app/*" -maxdepth 3 -exec cp -r {} Payload/ \;
+          # This creates the final IPA file Sideloadly needs
           zip -r MyFirstApp.ipa Payload
           
       - name: Upload IPA

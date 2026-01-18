@@ -24,9 +24,9 @@ jobs:
           
       - name: Package IPA
         run: |
-          mkdir Payload
-          # We specifically target ONLY your app folder, not Python's IDLE
-          cp -r MyFirstApp-ios/*.app Payload/
+          mkdir -p Payload
+          # This command specifically finds your app folder and ignores system tools
+          find MyFirstApp-ios -name "*.app" -maxdepth 1 -exec cp -r {} Payload/ \;
           zip -r MyFirstApp.ipa Payload
           
       - name: Upload IPA

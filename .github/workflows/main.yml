@@ -2,14 +2,17 @@ name: Build iPhone 5 IPA
 on: [push]
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      # This "installs" the checkout tool from Marketplace
+      - name: Checkout Code
+        uses: actions/checkout@v4
       
+      # This "installs" the Python tool from Marketplace
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          # FIXED: Used a dash '-' to fix the 'Unexpected input' warning
+          # REQUIRED: Use a dash '-' to avoid Marketplace errors
           python-version: '3.9'
           
       - name: Install Build Tools
@@ -25,13 +28,12 @@ jobs:
           
       - name: Package IPA
         run: |
-          # Create the required Payload folder
           mkdir -p Payload
-          # This command finds your actual app and puts it in the Payload
-          find . -name "*.app" -maxdepth 3 -not -path "*IDLE*" -exec cp -r {} Payload/ \;
-          # Zip it up
+          # Specific path to avoid the IDLE system files that caused the first crash
+          cp -r MyFirstApp-ios/myfirstapp.app Payload/
           zip -r MyFirstApp.ipa Payload
           
+      # This "installs" the upload tool from Marketplace
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:

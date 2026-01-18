@@ -7,28 +7,27 @@ from kivy.graphics import Color, Rectangle
 class MyFirstApp(App):
     def build(self):
         self.layout = FloatLayout()
-        
-        # Start with a white screen
+        # Step 1: Start with a white background
         with self.layout.canvas.before:
             Color(1, 1, 1, 1) 
-            self.rect = Rectangle(size=(2000, 2000), pos=(0,0))
+            self.rect = Rectangle(size=(3000, 3000), pos=(-500,-500))
             
-        # Wait 5 seconds, then run the success function
+        # Step 2: Wait 5 seconds then trigger the success screen
         Clock.schedule_once(self.show_success, 5)
         return self.layout
 
     def show_success(self, dt):
-        # Change background to Black
+        # Step 3: Change background to Green
         with self.layout.canvas.before:
-            Color(0, 0, 0, 1) 
-            Rectangle(size=(2000, 2000), pos=(0,0))
+            Color(0, 1, 0, 1) 
+            Rectangle(size=(3000, 3000), pos=(-500,-500))
             
-        # Add the Neon Green Text
+        # Step 4: Add Black text
         success_label = Label(
-            text="SUCCESS! U MADE UR\nTEST API/FIRST APP",
-            color=(0, 1, 0, 1), 
-            font_size='24sp',
-            halign='center'
+            text="SUCCESS!",
+            color=(0, 0, 0, 1), 
+            font_size='50sp',
+            bold=True
         )
         self.layout.add_widget(success_label)
 
